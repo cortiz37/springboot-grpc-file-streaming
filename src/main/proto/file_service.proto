@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.file.streaming";
+
+package file.streaming;
+
+service FileService {
+  rpc upload(stream FileRequest) returns(FileResponse);
+}
+
+message FileRequest {
+  string filename = 1;
+  bytes data = 2;
+}
+
+message FileResponse {
+  int32 status = 1;
+  string message = 2;
+}

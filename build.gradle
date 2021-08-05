@@ -1,0 +1,55 @@
+buildscript {
+    ext {
+        springBootVersion = '2.5.2'
+        lombokVersion = "1.18.20"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'io.github.lognet.grpc-spring-boot' version '4.5.4'
+}
+
+group = 'springboot-grpc-file-streaming'
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+version = '0.0.1-SNAPSHOT'
+
+bootJar {
+    archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+}
+
+[bootRun].each { runTask ->
+    configure(runTask) {
+        systemProperties System.properties
+    }
+}
+
+bootRun {
+    if (project.hasProperty('args')) {
+        args = (project.args.split("\\s+") as List)
+    }
+}
